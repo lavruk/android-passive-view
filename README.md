@@ -10,7 +10,7 @@ The main elements of our Passive View implementation in Android are:
 * Presenter implements the business logic controlling the view.
 * Model is the rest of the application logic.
 
-!![MVP Overview](https://source.corp.lookout.com/raw/ppiech/android-passive-view/master/images/mvp_overview.png)
+![MVP Overview](images/mvp_overview.png)
 
 ## Activity
 The goal of the Passive View pattern is to minimize the amount of logic implemented in the view (and thus not covered by unit tests), therefore the logic implemented here should be as minimal as possible.  

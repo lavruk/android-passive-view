@@ -124,3 +124,8 @@ public class MyPresenter {
   }
 }
 ```
+
+## Containers
+Activities that contain other views, such as fragments, lists with adapters, tabbed views), are a particualr challange for MVP.  If a contained view dynamically is dynamically allocated/inflated, then it's probably complex enough to have its own presenter.  The tricky part is allowing the presenter to implement the business logic of deciding what view should be created when, when only the activity has access to the necessary display resources to instantiate the child view and add it to the display.
+
+![MVP Overview](images/mvp_tabs.png)

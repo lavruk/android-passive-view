@@ -30,13 +30,14 @@ import android.widget.TextView;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private String[] mDataSet;
+    private final RecyclerViewPresenter mPresenter;
+    private int mCount = 0;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements RecyclerViewScreen.ViewHolder {
         private final TextView textView;
 
         public ViewHolder(View v) {
@@ -51,19 +52,27 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             textView = (TextView) v.findViewById(R.id.textView);
         }
 
-        public TextView getTextView() {
-            return textView;
+        @Override
+        public void setText(String text) {
+            textView.setText(text);
         }
     }
     // END_INCLUDE(recyclerViewSampleViewHolder)
 
+    public void setItemCount(int count) {
+        if (mCount != count) {
+            mCount = count;
+            notifyDataSetChanged();
+        }
+    }
+
     /**
      * Initialize the dataset of the Adapter.
      *
-     * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
+     * @param presenter that handles recycler view events
      */
-    public CustomAdapter(String[] dataSet) {
-        mDataSet = dataSet;
+    public CustomAdapter(RecyclerViewPresenter presenter) {
+        mPresenter = presenter;
     }
 
     // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
@@ -84,15 +93,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Log.d(TAG, "Element " + position + " set.");
 
-        // Get element from your dataset at this position and replace the contents of the view
-        // with that element
-        viewHolder.getTextView().setText(mDataSet[position]);
+        // Delegate the event to the presenter
+        mPresenter.onAdapterBindViewHolder(position, viewHolder);
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataSet.length;
+        return mCount;
     }
 }

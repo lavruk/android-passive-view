@@ -126,9 +126,9 @@ public class MyPresenter {
 ```
 ## Sample
 * [Simple My Activity Sample](MyActivity)
- * [Solution](lookout_android-passive-view/MyActivity)
+ * Solution in lookout_android-passive-view branch
 * [Recycler View (copied from googlesamples)](android-RecyclerView)
- * [Solution](lookout_android-passive-view/android-RecyclerView)
+ * Solution in lookout_android-passive-view branch
 
 ## Dagger
 An android activity has its own life-cycle and can have multiple instances residing in memory at the same time, therefore the MVP elments created and managed by Dagger for the activity require their own graph of objects in (sub-component or a dependent component). 

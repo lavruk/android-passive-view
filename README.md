@@ -124,11 +124,17 @@ public class MyPresenter {
   }
 }
 ```
+## Dagger
+An android activity has its own life-cycle and can have multiple instances residing in memory at the same time, therefore the MVP elments created and managed by Dagger for the activity require their own graph of objects in (sub-component or a dependent component). 
+![MVP Dagger Graph](images/mvp_dagger_graph.png)
+
+To achieve the above graph of objects, we use a sub-component, which is created by calling a `newMyActivitySubcomponent()` method on the application component.  This method will call a new instance of the graph every time it's called, and it requires a reference to the creating `MyActivity` in order to seed the graph.  The `MyUiComponent` interface helps encapsulate the UI layer of the application.
+![MVP Dagger](images/mvp_dagger.png)
 
 ## Containers
 Activities that contain other views, such as fragments, lists with adapters, tabbed views), are a particualr challange for MVP.  If a contained view dynamically is dynamically allocated/inflated, then it's probably complex enough to have its own presenter.  The tricky part is allowing the presenter to implement the business logic of deciding what view should be created when, when only the activity has access to the necessary display resources to instantiate the child view and add it to the display.
 
-![MVP Overview](images/mvp_tabs.png)
+![MVP Containers](images/mvp_tabs.png)
 
 * Use a view holder or some other wrapper to create and manage the android view objects that are added to the display dynamically.
 * The view holder has its own presenter, which should be created on demand at the time when the android view object is created.
@@ -136,3 +142,4 @@ Activities that contain other views, such as fragments, lists with adapters, tab
  * It needs to have a way to create the view holers for the elements.  This could be using a factory method on the container screen interface, or injected using dagger, etc.
  * The container presenter needs a way to refer to the element's view holder.  This could be an enum, which is then mapped by the container activity to the view holder, or it could be a [marker interface](https://en.wikipedia.org/wiki/Marker_interface_pattern) on the view holder, or some other form of handle.
 * The container presenter should not reference element's presenter directly.  Element's presenter is a contract between the element view holder and the application model only.
+

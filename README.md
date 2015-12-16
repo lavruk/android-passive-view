@@ -74,7 +74,7 @@ public class MyPresenter {
 In general, public presenter method should not have return values unless handling a display event requries a result to be returned synchronously.
 
 * DO NOT call the same presenter method from multiple places in the activity:
-```
+```java
 public class MyActivity extends Activity implements MyScreen {
   public void onCreated() {
     findById(R.id.stopButton).addListener(new OnButtonPressed() { 
@@ -96,7 +96,7 @@ public class MyPresenter {
 }
 ```
 Instead DO:
-```
+```java
 public class MyActivity extends Activity implements MyScreen {
   public void onCreated() {
     findById(R.id.stopButton).addListener(new OnButtonPressed() { 
@@ -129,3 +129,10 @@ public class MyPresenter {
 Activities that contain other views, such as fragments, lists with adapters, tabbed views), are a particualr challange for MVP.  If a contained view dynamically is dynamically allocated/inflated, then it's probably complex enough to have its own presenter.  The tricky part is allowing the presenter to implement the business logic of deciding what view should be created when, when only the activity has access to the necessary display resources to instantiate the child view and add it to the display.
 
 ![MVP Overview](images/mvp_tabs.png)
+
+* Use a view holder or some other wrapper to create and manage the android view objects that are added to the display dynamically.
+* The view holder has its own presenter, which should be created on demand at the time when the android view object is created.
+* The presenter for the container view should be responsible for decising which and how many contained elements there are.
+ * It needs to have a way to create the view holers for the elements.  This could be using a factory method on the container screen interface, or injected using dagger, etc.
+ * The container presenter needs a way to refer to the element's view holder.  This could be an enum, which is then mapped by the container activity to the view holder, or it could be a [marker interface](https://en.wikipedia.org/wiki/Marker_interface_pattern) on the view holder, or some other form of handle.
+* The container presenter should not reference element's presenter directly.  Element's presenter is a contract between the element view holder and the application model only.

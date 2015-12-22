@@ -23,6 +23,7 @@ Guidelines for implementing the activity:
 * Keep animation logic in the activity.  
   * Animations have a very wide, builder-style interface that is difficult to wrap with a screen interface.
   * Correctness of animations needs to be verified by visual inspection, which does not lend itself well to unit testing.
+* Provide accessor methods for strings retrieved by resource-ID.
 
 ## Presenter
 * The presenter should only be invoked by the Activity, therefore its only public methods should be event handlers for the view.
@@ -124,6 +125,39 @@ public class MyPresenter {
   }
 }
 ```
+Handling strings
+
+* DO NOT reference strings by reference ID in the presenter
+```java
+public class MyActivity extends Activity implements MyScreen {
+  public String getString(int resourceId) {
+    return getStrings().get(resourceId);
+  }
+}
+
+public class MyPresenter {
+  public void onCreate() {
+    title = screen.getString(R.strings.my_title);
+    ...
+  }
+}
+```
+Instead DO:
+```java
+public class MyActivity extends Activity implements MyScreen {
+  public String getMyTitle() {
+    return getStrings().get(R.strings.my_title);
+  }
+}
+
+public class MyPresenter {
+  public void onCreate() {
+    title = screen.getMyTitle();
+    ...
+  }
+}
+```
+
 ## Sample
 * [Simple My Activity Sample](MyActivity)
  * Solution in lookout_android-passive-view branch
